@@ -23,6 +23,17 @@ type Book struct {
 	Language  string
 }
 
+func CheckFile(filename string) error {
+	_, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		_, err := os.Create(filename)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func GetAllBooks() Books {
 	err := CheckFile(fileName)
 	if err != nil {
@@ -66,18 +77,6 @@ func (b Books) GetBookByID(id string) Book {
 	}
 	
 	return Book{}
-}
-
-
-func CheckFile(filename string) error {
-	_, err := os.Stat(filename)
-	if os.IsNotExist(err) {
-		_, err := os.Create(filename)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func main() {
