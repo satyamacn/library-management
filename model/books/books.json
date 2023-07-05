@@ -1,0 +1,20 @@
+{
+    "books": [
+      {
+        "id": "01",
+        "title": "The Lord of the Rings",
+        "author": "JRR",
+        "genre": "Adventure",
+        "publisher": "ABC" ,
+        "language": "English"
+      },
+      {
+        "id": "02",
+        "title": "To Kill a Mockingbird",
+        "author": "Lee",
+        "genre": "Fiction",
+        "publisher": "XYZ",
+        "language": "English"
+      }
+    ]
+    }
