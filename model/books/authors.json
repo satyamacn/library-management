@@ -1,0 +1,17 @@
+{
+    "authors": [
+      {
+        "id": "01",
+        "name": "john doe",
+        "country": "USA",
+        "penName": "J.D"
+      },
+      {
+        "id": "02",
+        "name": "Jane Smith",
+        "country": "Canada",
+        "penName": "J. S."
+      }
+    ]
+  }
+  
