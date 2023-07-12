@@ -1,22 +1,23 @@
-package main
+package books
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
+
+	"github.com/satyamacn/library-management/authors"
 )
 
-const (
-	fileName    = "books.json"
-	authorsFile = "authors.json"
-)
+const fileName = "books.json"
 
 type Book struct {
 	ID        string
 	Title     string
-	Author    Author
+	Author    authors.Author
 	Genre     string
 	Publisher string
 	Language  string
@@ -24,17 +25,6 @@ type Book struct {
 
 type Books struct {
 	Books []Book
-}
-
-type Author struct {
-	ID       string
-	Name     string
-	Country  string
-	PenName  string
-}
-
-type Authors struct {
-	Authors []Author
 }
 
 func CheckFile(filename string) error {
@@ -72,44 +62,10 @@ func GetAllBooks() Books {
 	return books
 }
 
-func GetAllAuthors() Authors {
-	err := CheckFile(authorsFile)
-	if err != nil {
-		log.Println(err)
-	}
-
-	jsonFile, err := os.Open(authorsFile)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("Successfully Opened", authorsFile)
-
-	defer jsonFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	var authors Authors
-
-	json.Unmarshal(byteValue, &authors)
-
-	return authors
-}
-
 func (b Books) PrintAll() {
 	for i := 0; i < len(b.Books); i++ {
 		fmt.Println(b.Books[i].ToString())
 	}
-}
-
-func (b Authors) PrintAllAuthors() {
-	for i := 0; i < len(b.Authors); i++ {
-		fmt.Println(b.Authors[i].ToString())
-	}
-}
-
-func (b Author) ToString() string {
-	return "Name: " + b.Name + ", " + "Pen Name: " + b.PenName + ", " + "Country: " + b.Country
 }
 
 func (b Book) ToString() string {
@@ -127,35 +83,72 @@ func (b Books) GetBookByID(id string) Book {
 	return Book{}
 }
 
-func (a Authors) GetAuthorByName(name string) Author {
-	for i := 0; i < len(a.Authors); i++ {
-		if a.Authors[i].Name == name {
-			fmt.Printf("Author found: Name: %s\n Country: %s\n Pen Name: %s\n", a.Authors[i].Name, a.Authors[i].Country, a.Authors[i].PenName)
-			return a.Authors[i]
-		}
+
+// func AddBook(book Book) {
+// 	books := GetAllBooks()
+// 	books.Books = append(books.Books, book)
+
+// 	updatedBooksJSON, err := json.Marshal(books)
+// 	if err != nil {
+// 		log.Println("Error marshaling books:", err)
+// 		return
+// 	}
+
+// 	err = ioutil.WriteFile(fileName, updatedBooksJSON, 0644)
+// 	if err != nil {
+// 		log.Println("Error writing books file:", err)
+// 		return
+// 	}
+
+// 	fmt.Println("Book added successfully.")
+// }
+func createBook(scanner *bufio.Scanner) Book {
+	fmt.Println("Adding a new book:")
+	fmt.Print("Enter the ID: ")
+	scanner.Scan()
+	id := strings.TrimSpace(scanner.Text())
+
+	fmt.Print("Enter the title: ")
+	scanner.Scan()
+	title := strings.TrimSpace(scanner.Text())
+
+	fmt.Print("Enter the author name: ")
+	scanner.Scan()
+	authorName := strings.TrimSpace(scanner.Text())
+
+	fmt.Print("Enter the genre: ")
+	scanner.Scan()
+	genre := strings.TrimSpace(scanner.Text())
+
+	fmt.Print("Enter the publisher: ")
+	scanner.Scan()
+	publisher := strings.TrimSpace(scanner.Text())
+
+	fmt.Print("Enter the language: ")
+	scanner.Scan()
+	language := strings.TrimSpace(scanner.Text())
+
+	// Create and return the book object
+	book := Book{
+		ID:        id,
+		Title:     title,
+		Author:    authors.Author{Name: authorName},
+		Genre:     genre,
+		Publisher: publisher,
+		Language:  language,
 	}
 
-	return Author{}
+	return book
 }
 
-func AddBook(book Book) {
-	books := GetAllBooks()
-	books.Books = append(books.Books, book)
+func addBook(scanner *bufio.Scanner) {
+	book := createBook(scanner)
 
-	updatedBooksJSON, err := json.Marshal(books)
-	if err != nil {
-		log.Println("Error marshaling books:", err)
-		return
-	}
+	// TODO: Add logic to save the book to your library management system
 
-	err = ioutil.WriteFile(fileName, updatedBooksJSON, 0644)
-	if err != nil {
-		log.Println("Error writing books file:", err)
-		return
-	}
-
-	fmt.Println("Book added successfully.")
+	fmt.Println("Book added successfully!",book)
 }
+
 
 func RemoveBookByName(name string) {
 	books := GetAllBooks()
@@ -190,28 +183,4 @@ func RemoveBookByName(name string) {
 	}
 
 	fmt.Println("Book removed successfully.")
-}
-
-func main() {
-
-	books := GetAllBooks()
-	authors := GetAllAuthors()
-
-	books.PrintAll()
-
-	books.GetBookByID("03")
-	authors.GetAuthorByName("Jane Smith")
-	newBook := Book{
-		ID:        "04",
-		Title:     "ikigai",
-		Author:    Author{Name: "Hector Garcia", Country: "USA", PenName: "H.G"},
-		Genre:     "Non-fiction",
-		Publisher: "XYZ",
-		Language:  "English",
-	}
-
-	AddBook(newBook)
-	//RemoveBookByName("New Book")
-	books.PrintAll();
-	authors.PrintAllAuthors();
 }
