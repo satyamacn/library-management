@@ -84,24 +84,25 @@ func (b Books) GetBookByID(id string) Book {
 }
 
 
-// func AddBook(book Book) {
-// 	books := GetAllBooks()
-// 	books.Books = append(books.Books, book)
+func AddBook(book Book) {
+	books := GetAllBooks()
+	books.Books = append(books.Books, book)
 
-// 	updatedBooksJSON, err := json.Marshal(books)
-// 	if err != nil {
-// 		log.Println("Error marshaling books:", err)
-// 		return
-// 	}
+	updatedBooksJSON, err := json.Marshal(books)
+	if err != nil {
+		log.Println("Error marshaling books:", err)
+		return
+	}
 
-// 	err = ioutil.WriteFile(fileName, updatedBooksJSON, 0644)
-// 	if err != nil {
-// 		log.Println("Error writing books file:", err)
-// 		return
-// 	}
+	err = ioutil.WriteFile(fileName, updatedBooksJSON, 0644)
+	if err != nil {
+		log.Println("Error writing books file:", err)
+		return
+	}
 
-// 	fmt.Println("Book added successfully.")
-// }
+	fmt.Println("Book added successfully.")
+}
+
 func createBook(scanner *bufio.Scanner) Book {
 	fmt.Println("Adding a new book:")
 	fmt.Print("Enter the ID: ")
@@ -143,9 +144,6 @@ func createBook(scanner *bufio.Scanner) Book {
 
 func addBook(scanner *bufio.Scanner) {
 	book := createBook(scanner)
-
-	// TODO: Add logic to save the book to your library management system
-
 	fmt.Println("Book added successfully!",book)
 }
 
