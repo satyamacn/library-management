@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"encoding/json"
@@ -10,21 +10,7 @@ import (
 	"github.com/satyamacn/library-management/books"
 )
 
-func main() {
-	r := mux.NewRouter()
-
-	r.HandleFunc("/api/books", handleBooks).Methods("GET", "POST")
-	r.HandleFunc("/api/books/{id}", handleBookByID).Methods("GET")
-	r.HandleFunc("/api/books/title/{title}", handleDeleteBookByTitle).Methods("DELETE")
-	r.HandleFunc("/api/authors", handleAuthors).Methods("GET")
-	r.HandleFunc("/api/authors/{name}", handleAuthorByName).Methods("GET")
-	r.HandleFunc("/api/books/last", handleRemoveLastBook).Methods("DELETE")
-
-	fmt.Println("Server started at http://localhost:8080")
-	http.ListenAndServe(":8080", r)
-}
-
-func handleBooks(w http.ResponseWriter, r *http.Request) {
+func HandleBooks(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		bookList := books.GetAllBooks()
 		w.Header().Set("Content-Type", "application/json")
@@ -42,7 +28,7 @@ func handleBooks(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handleBookByID(w http.ResponseWriter, r *http.Request) {
+func HandleBookByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	book := books.GetAllBooks().GetBookByID(id)
@@ -54,13 +40,13 @@ func handleBookByID(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(book)
 }
 
-func handleAuthors(w http.ResponseWriter, r *http.Request) {
+func HandleAuthors(w http.ResponseWriter, r *http.Request) {
 	authorList := authors.GetAllAuthors()
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(authorList)
 }
 
-func handleAuthorByName(w http.ResponseWriter, r *http.Request) {
+func HandleAuthorByName(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	name := vars["name"]
 	author := authors.GetAllAuthors().GetAuthorByName(name)
@@ -72,7 +58,7 @@ func handleAuthorByName(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(author)
 }
 
-func handleDeleteBookByTitle(w http.ResponseWriter, r *http.Request) {
+func HandleDeleteBookByTitle(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	title := vars["title"]
 
@@ -82,7 +68,7 @@ func handleDeleteBookByTitle(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handleRemoveLastBook(w http.ResponseWriter, r *http.Request) {
+func HandleRemoveLastBook(w http.ResponseWriter, r *http.Request) {
 	books.RemoveLastBook()
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Last book record removed."))

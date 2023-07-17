@@ -1,13 +1,11 @@
 package books
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/satyamacn/library-management/authors"
 )
@@ -102,51 +100,6 @@ func AddBook(book Book) {
 
 	fmt.Println("Book added successfully.")
 }
-
-func createBook(scanner *bufio.Scanner) Book {
-	fmt.Println("Adding a new book:")
-	fmt.Print("Enter the ID: ")
-	scanner.Scan()
-	id := strings.TrimSpace(scanner.Text())
-
-	fmt.Print("Enter the title: ")
-	scanner.Scan()
-	title := strings.TrimSpace(scanner.Text())
-
-	fmt.Print("Enter the author name: ")
-	scanner.Scan()
-	authorName := strings.TrimSpace(scanner.Text())
-
-	fmt.Print("Enter the genre: ")
-	scanner.Scan()
-	genre := strings.TrimSpace(scanner.Text())
-
-	fmt.Print("Enter the publisher: ")
-	scanner.Scan()
-	publisher := strings.TrimSpace(scanner.Text())
-
-	fmt.Print("Enter the language: ")
-	scanner.Scan()
-	language := strings.TrimSpace(scanner.Text())
-
-	book := Book{
-		ID:        id,
-		Title:     title,
-		Author:    authors.Author{Name: authorName},
-		Genre:     genre,
-		Publisher: publisher,
-		Language:  language,
-	}
-
-	return book
-}
-
-func addBook(scanner *bufio.Scanner) {
-	book := createBook(scanner)
-	fmt.Println("Book added successfully!",book)
-}
-
-
 
 func RemoveBookByName(title string) {
 	books := GetAllBooks()
