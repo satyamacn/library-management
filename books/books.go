@@ -129,7 +129,6 @@ func createBook(scanner *bufio.Scanner) Book {
 	scanner.Scan()
 	language := strings.TrimSpace(scanner.Text())
 
-	// Create and return the book object
 	book := Book{
 		ID:        id,
 		Title:     title,
@@ -148,23 +147,21 @@ func addBook(scanner *bufio.Scanner) {
 }
 
 
-func RemoveBookByName(name string) {
+
+func RemoveBookByName(title string) {
 	books := GetAllBooks()
 
-	// Find the index of the book with the given name
 	index := -1
 	for i, book := range books.Books {
-		if book.Title == name {
+		if book.Title == title {
 			index = i
 			break
 		}
 	}
 
-	// If the book was found, remove it from the list
 	if index != -1 {
 		books.Books = append(books.Books[:index], books.Books[index+1:]...)
 	} else {
-		fmt.Println("Book not found.")
 		return
 	}
 
@@ -180,5 +177,31 @@ func RemoveBookByName(name string) {
 		return
 	}
 
-	fmt.Println("Book removed successfully.")
+	log.Printf("Book '%s' removed successfully.", title)
 }
+
+func RemoveLastBook() {
+	books := GetAllBooks()
+
+	if len(books.Books) == 0 {
+		log.Println("No books in the library.")
+		return
+	}
+
+	books.Books = books.Books[:len(books.Books)-1]
+
+	updatedBooksJSON, err := json.Marshal(books)
+	if err != nil {
+		log.Println("Error marshaling books:", err)
+		return
+	}
+
+	err = ioutil.WriteFile(fileName, updatedBooksJSON, 0644)
+	if err != nil {
+		log.Println("Error writing books file:", err)
+		return
+	}
+
+	log.Println("Last book record removed successfully.")
+}
+
