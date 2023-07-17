@@ -1,12 +1,20 @@
 # Library Management System
 
-- Library Management System provides various operations related to library management such as: 
+- Implemented a basic REST API using the Go net/http package. The API has various endpoints that can be used to interact with the Library Management System data.
 
-1. addbook: This command allows users to add a new book to the library. Users can input details such as the book's title, author, and publication year.
+- Here are the endpoints that have been implemented:
 
-2. searchbook: Users can use this command to search for books in the library based on specific criteria such as the book's title or author.
+1. Get All Books: GET /api/books - This endpoint retrieves all the books in the library.
 
-3. listbooks: This command displays a list of all books in the library, along with their details such as ID, title, author.
+2. Add Book: POST /api/books - This endpoint allows you to add a new book to the library. We need to send a JSON script containing the book details (ID, Title, Author, Genre, Publisher, Language) in the request body.
 
-4. listmembers: Users can execute this command to view a list of all registered library members. The CLI will display their details such as ID, name, and contact information.
+3. Get Book by ID: GET /api/books/{id} - This endpoint retrieves a specific book from the library based on its ID.
+
+4. Delete Book by Name: DELETE /api/books/{name} - This endpoint deletes a book from the library based on its title (name).
+
+5. Get All Authors: GET /api/authors - This endpoint retrieves all the authors from the library.
+
+
+6. Delete Last Book Record: DELETE /api/books/last - This endpoint removes the last book record from the library.
+
 
